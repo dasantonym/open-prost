@@ -1,0 +1,12 @@
+dist: trusty
+language: node_js
+node_js:
+  - "0.12"
+  - "4"
+  - "6"
+  - "7"
+script:
+  - npm run jshint
+  - npm run babel
+  - npm run build
+  - npm test

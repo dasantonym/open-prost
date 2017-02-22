@@ -1,0 +1,6 @@
+template#op-app-main-tpl
+  el-row(:gutter="20")
+    el-col(:span="24")
+      el-tabs(v-model="activeName")
+        el-tab-pane(label="Ausgabe", name="output")
+        el-tab-pane(label="Admin", name="admin")
