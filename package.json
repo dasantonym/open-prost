@@ -41,7 +41,7 @@
     "element-ui": "^1.1.6",
     "feathers": "^2.0.3",
     "feathers-authentication": "^0.7.12",
-    "feathers-configuration": "^0.3.3",
+    "feathers-configuration": "^0.4.1",
     "feathers-errors": "^2.5.0",
     "feathers-hooks": "^1.7.1",
     "feathers-nedb": "^2.6.1",
