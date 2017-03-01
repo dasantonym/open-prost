@@ -5,7 +5,7 @@ class AppMain extends Vue {
     super();
 
     const _opts = {
-      activeName: 'output'
+      activeName: 'take-out'
     };
 
     this.template = '#op-app-main-tpl';

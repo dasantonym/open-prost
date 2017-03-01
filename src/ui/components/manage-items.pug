@@ -37,7 +37,7 @@ template#op-manage-items-tpl
           el-table-column(prop="tags", label="Tags", :formatter="arrayToString",
             :filter-method="filterTags", :filters="itemData.tags")
             template(scope="scope")
-              el-tag(close-transition, v-for="tag in scope.row.tags") {{ tag }}
+              el-tag(close-transition, v-for="tag in scope.row.tags", :key="tag") {{ tag }}
           el-table-column(fixed="right", width="80")
             template(scope="scope")
               el-button-group

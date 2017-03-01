@@ -1,4 +1,5 @@
 'use strict';
+const takeouts = require('./takeout/index');
 const storage = require('./storage/index');
 const location = require('./location/index');
 const category = require('./category/index');
@@ -18,4 +19,5 @@ module.exports = function() {
   app.configure(category);
   app.configure(location);
   app.configure(storage);
+  app.configure(takeouts);
 };
