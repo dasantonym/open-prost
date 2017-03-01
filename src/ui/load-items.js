@@ -21,9 +21,9 @@ class LoadItems {
 
   loadItems() {
     const _this = this,
-      _loader = Loading.service({fullscreen: true});
+      _loader = Loading.service({ fullscreen: true });
 
-    return this._appRef.service('items').find({paginate: false})
+    return this._appRef.service('items').find({ paginate: false })
       .then(res => {
         const reduceValues = (data, prop) => {
           return data.reduce((entries, entry) => {
@@ -43,7 +43,7 @@ class LoadItems {
         };
         _this.tags = reduceValues(res.data, 'tags')
           .map(tag => {
-            return {text: tag, value: tag}
+            return {text: tag, value: tag};
           });
         _this.quantities = reduceValues(res.data, 'quantities');
         _this.units = reduceValues(res.data, 'units');

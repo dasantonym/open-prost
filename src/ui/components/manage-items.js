@@ -103,7 +103,7 @@ class ManageItems extends Vue {
       formatTags(row) {
         return row.tags.map(tag => {
           return { text: tag, value: tag };
-        })
+        });
       },
       filterTags(tag, row) {
         return row.tags.indexOf(tag) > -1;
