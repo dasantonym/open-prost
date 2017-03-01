@@ -13,11 +13,11 @@
   "contributors": [],
   "bugs": {},
   "engines": {
-    "node": ">= 0.12.0"
+    "node": ">= 4.5"
   },
   "scripts": {
     "start": "node dist/server/",
-    "release": "npm run test && npm run clean && npm run babel && npm run build",
+    "release": "npm run clean && npm run babel && npm run build && npm run test",
     "build": "npm run webpack && npm run pug && npm run less",
     "test": "npm run jshint && npm run mocha",
     "jshint": "jshint src/. test/. --config",
@@ -50,6 +50,7 @@
     "nedb": "^1.8.0",
     "passport": "^0.3.2",
     "serve-favicon": "^2.4.0",
+    "superagent": "^3.4.4",
     "vue": "^2.1.10",
     "winston": "^2.3.1"
   },
