@@ -1,6 +1,13 @@
 template#op-app-main-tpl
-  el-tabs(v-model="activeName")
-    el-tab-pane(label="Entnahme", name="take-out")
+  #app-main
+    el-menu(:default-active="activeMenu", mode="horizontal", @select="handleMenu")
+      el-menu-item(index="takeout") Entnahme
+      el-menu-item(index="admin") Admin
+    el-row(v-if="activeMenu === 'takeout'")
       op-take-out
-    el-tab-pane(label="Artikel", name="manage-items")
-      op-manage-items
+    el-row(v-if="activeMenu === 'admin'")
+      el-tabs(v-model="activeTab")
+        el-tab-pane(label="Einstellungen", name="configure")
+
+        el-tab-pane(label="Artikel", name="manage-items")
+          op-manage-items

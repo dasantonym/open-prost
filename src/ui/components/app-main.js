@@ -5,13 +5,17 @@ class AppMain extends Vue {
     super();
 
     const _opts = {
-      activeName: 'take-out'
+      activeMenu: 'takeout',
+      activeTab: 'configure'
     };
 
     this.template = '#op-app-main-tpl';
     this.methods = {
       handleTabs(/* tab, event */) {
         /* ignored */
+      },
+      handleMenu(key) {
+        _opts.activeMenu = key
       }
     };
     this.data = function () {
