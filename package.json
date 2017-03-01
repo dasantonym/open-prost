@@ -30,7 +30,7 @@
     "pug": "pug src/ui/index.pug --out dist/ui/",
     "less": "lessc --clean-css='--s1 --advanced' ./src/ui/index.less ./dist/ui/openprost-ui.css",
     "clean": "rm -r ./dist",
-    "mocha": "mocha test/ --recursive"
+    "mocha": "mocha test/ --recursive --timeout 4000"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
