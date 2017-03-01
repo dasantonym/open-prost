@@ -41,7 +41,7 @@
     "cors": "^2.8.1",
     "debug": "^2.6.1",
     "element-ui": "^1.1.6",
-    "feathers": "2.0.3",
+    "feathers": "^2.1.0",
     "feathers-authentication": "^0.7.12",
     "feathers-configuration": "^0.4.1",
     "feathers-errors": "^2.5.0",
