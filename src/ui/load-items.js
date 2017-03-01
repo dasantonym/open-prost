@@ -19,7 +19,11 @@ class LoadItems {
     _instances.set(appRef, this);
   }
 
-  loadItems() {
+  loadItems(forceUpdate) {
+    if (!forceUpdate && this.items.length > 0) {
+      return Promise.resolve(this);
+    }
+
     const _this = this,
       _loader = Loading.service({ fullscreen: true });
 
