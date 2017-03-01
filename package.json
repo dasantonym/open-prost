@@ -2,16 +2,18 @@
   "name": "open-prost",
   "description": "The future is liquid.",
   "version": "0.1.0",
-  "homepage": "",
-  "main": "src/",
-  "keywords": [
-    "feathers"
-  ],
-  "license": "MIT",
-  "repository": {},
-  "author": {},
+  "homepage": "https://github.com/dasantonym/open-prost",
+  "keywords": ["liquid", "future", "awesome", "prostate", "artproject"],
+  "license": "WTFPL",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dasantonym/open-prost.git"
+  },
+  "author": "Anton K. / Gängeviertel e.V. <info@das-gaengeviertel.info>",
   "contributors": [],
-  "bugs": {},
+  "bugs": {
+    "url": "https://github.com/dasantonym/open-prost/issues"
+  },
   "engines": {
     "node": ">= 4.5"
   },
