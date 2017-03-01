@@ -15,7 +15,7 @@ class AppMain extends Vue {
         /* ignored */
       },
       handleMenu(key) {
-        _opts.activeMenu = key
+        _opts.activeMenu = key;
       }
     };
     this.data = function () {

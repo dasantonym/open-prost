@@ -17,19 +17,35 @@
   "engines": {
     "node": ">= 4.5"
   },
+  "main": "ui/index.html",
+  "node-main": "server/index.js",
+  "js-flags": "--harmony",
+  "window": {
+    "title": "OpenProst",
+    "icon": "assets/openprost-icon-256.png",
+    "toolbar": true,
+    "frame": true,
+    "width": 1280,
+    "height": 720,
+    "min-width": 1024,
+    "min-height": 600
+  },
   "scripts": {
-    "start": "node dist/server/",
-    "release": "npm run clean && npm run babel && npm run build && npm run test",
+    "start": "node build/server/",
+    "release": "npm run clean && npm run babel && npm run build && npm run test && npm run build-desktop",
     "build": "npm run webpack && npm run pug && npm run less",
     "test": "npm run jshint && npm run mocha",
     "jshint": "jshint src/. test/. --config",
-    "babel": "babel src/server/ --out-dir dist/server/",
+    "babel": "babel src/server/ --out-dir build/server/",
     "webpack": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "webpack-dev": "cross-env NODE_ENV=dev webpack --progress --hide-modules",
     "webpack-watch": "cross-env NODE_ENV=dev webpack --watch --progress --hide-modules",
-    "pug": "pug src/ui/index.pug --out dist/ui/",
-    "less": "lessc --clean-css='--s1 --advanced' ./src/ui/index.less ./dist/ui/openprost-ui.css",
-    "clean": "rm -r ./dist",
+    "pug": "pug src/ui/index.pug --out build/desktop/ui/",
+    "less": "lessc --clean-css='--s1 --advanced' ./src/ui/index.less ./build/desktop/ui/openprost-ui.css",
+    "clean": "rm -rf ./build && rm -rf ./dist",
+    "copy": "cp ./package.json build/desktop/ && cp -r ./build/server ./build/desktop/ && cp -r ./assets build/desktop/ && cp -r ./config ./build/desktop/",
+    "debug-desktop": "npm run copy && cross-env NODE_ENV=dev nwb nwbuild -v 0.20.1-sdk -r -- --remote-debugging-port=9222 ./build/desktop/",
+    "build-desktop": "npm run copy && cross-env NODE_ENV=production nwb nwbuild --win-ico assets/openprost.ico --mac-icns assets/openprost.icns -o ./dist --side-by-side -p osx64 -v 0.20.1 ./build/desktop/",
     "mocha": "mocha test/ --recursive --timeout 4000"
   },
   "dependencies": {

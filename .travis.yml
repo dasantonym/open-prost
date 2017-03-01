@@ -4,7 +4,5 @@ node_js:
   - "4"
   - "7"
 script:
-  - npm run jshint
-  - npm run babel
-  - npm run build
-  - npm test
+  - npm run release
+  - npm run build-desktop
