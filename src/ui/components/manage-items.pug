@@ -1,0 +1,29 @@
+template#op-manage-items-tpl
+  #items
+    el-row
+      h1 Artikel anlegen
+      el-form(ref="form", :model="itemToAdd", label-position="top", )
+        el-form-item
+          el-alert(type="info", show-icon, :closable="false",
+            title='Mehrfachnennungen müssen per Komma getrennt werden, Kommawerte mit einem Punkt (z.B. "1,0.3"' +
+              '/ "Liter" / "Kisten,Flaschen" für 1L, 0,3L Kisten und Flaschen).')
+        el-form-item(label="Titel", prop="title")
+          el-input(placeholder="z.B. Chrombecher Pilzner, Arschtra Blaulicht, Specks Ultra...", v-model="itemToAdd.title")
+        el-form-item(label="Tags", prop="tags")
+          el-input(placeholder="z.B. Schnaps, Haushaltswaren...", v-model="itemToAdd.tags")
+        el-form-item(label="Mengen", prop="quantities")
+          el-input(placeholder="z.B. Kisten, Flaschen...", v-model="itemToAdd.quantities")
+        el-form-item(label="Größen", prop="sizes")
+          el-input(placeholder="z.B. 1, 0.3, 12...", v-model="itemToAdd.sizes")
+        el-form-item(label="Einheiten", prop="units")
+          el-input(placeholder="z.B. Liter, Beutel, Rolle, Sack...", v-model="itemToAdd.units")
+        el-form-item
+          el-button(type="primary", @click="addItem") Speichern
+    el-row
+      h1 Vorhandene Artikel
+      el-table(:data="items", stripe)
+        el-table-column(prop="title", label="Titel", fixed="true", width="200")
+        el-table-column(prop="quantities", label="Mengen")
+        el-table-column(prop="sizes", label="Größen")
+        el-table-column(prop="units", label="Einheiten")
+        el-table-column(prop="tags", label="Tags")
