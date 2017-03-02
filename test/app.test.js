@@ -2,7 +2,9 @@
 
 const assert = require('assert');
 const request = require('request');
+const configuration = require('feathers-configuration');
 const app = require('../src/server/app').app;
+app.configure(configuration(require('path').join(__dirname, '..', '..')));
 require('../src/server/app').initApp();
 
 describe('Feathers application tests', function() {
