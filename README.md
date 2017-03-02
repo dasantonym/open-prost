@@ -24,6 +24,6 @@ Unstable: Expect patches and features, possible api changes.
 
 ## License
 
-Copyright (c) 2017
+Copyright (c) 2017 Anton K.
 
-Licensed under the [MIT license](LICENSE).
+Licensed under the [Do What the Fuck You Want To Public License](LICENSE).
