@@ -9,6 +9,7 @@ class TakeOut extends Vue {
       title: undefined,
       quantity_amount: undefined,
       quantity: undefined,
+      quantity_price: undefined,
       size: undefined,
       unit: undefined
     };
@@ -102,8 +103,12 @@ class TakeOut extends Vue {
         _opts.takeOut = Object.assign({}, defaultTakeOut);
         _opts.takeOut.title = _opts.itemToAdd.title;
         _opts.takeOut.quantity_amount = 1;
+        _opts.takeOut.quantity_price = 0.0;
         if (Array.isArray(_opts.itemToAdd.quantities)) {
           _opts.takeOut.quantity = _opts.itemToAdd.quantities[0];
+        }
+        if (Array.isArray(_opts.itemToAdd.quantity_prices)) {
+          _opts.takeOut.quantity_price = _opts.itemToAdd.quantity_prices[0];
         }
         if (Array.isArray(_opts.itemToAdd.sizes)) {
           _opts.takeOut.size = _opts.itemToAdd.sizes[0];
@@ -118,11 +123,22 @@ class TakeOut extends Vue {
       return _opts;
     };
 
+    this.computed = {
+      tableHeight: function () {
+        if (window.matchMedia && window.matchMedia("(-webkit-device-pixel-ratio: 2)").matches) {
+          return window.innerHeight - 400;
+        } else {
+          return window.innerHeight - 200;
+        }
+      }
+    };
+
     this.template = '#op-take-out-tpl';
 
     this.mounted = function () {
       _opts._appRef.get('loadItems').loadItems()
         .then(data => _opts.itemData = data);
+
     };
   }
 }

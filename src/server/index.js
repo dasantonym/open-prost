@@ -1,9 +1,29 @@
 'use strict';
 
-const app = require('./app');
-const port = app.get('port');
-const server = app.listen(port);
+const app = require('./app').app;
+const configuration = require('feathers-configuration');
 
-server.on('listening', () =>
-  console.log(`Feathers application started on ${app.get('host')}:${port}`)
-);
+/* global window:true */
+if (typeof window !== 'undefined' && typeof window.require === 'function') {
+  setTimeout(function () {
+    const gui = window.require('nw.gui');
+    /* global window:false */
+    /* jshint node:true */
+    process.env.NODE_ENV = 'webkit';
+    app.configure(configuration(require('path').join(__dirname, '..')));
+    app.set('nedb', require('path').join(gui.App.dataPath, 'nedb'));
+    /* jshint node:false */
+    require('./app').initApp();
+    let port = app.get('port');
+    app.listen(port).on('listening', () =>
+      console.log(`Feathers application started on ${app.get('host')}:${port}`)
+    );
+  }, 1000);
+} else {
+  app.configure(configuration(require('path').join(__dirname, '..', '..')));
+  require('./app').initApp();
+  let port = app.get('port');
+  app.listen(port).on('listening', () =>
+    console.log(`Feathers application started on ${app.get('host')}:${port}`)
+  );
+}

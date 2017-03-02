@@ -1,9 +1,12 @@
+import Vue from 'vue';
 import {Loading} from 'element-ui';
 
 const _instances = new WeakMap();
 
-class LoadItems {
+class LoadItems extends Vue {
   constructor(appRef) {
+    super();
+
     if (_instances.has(appRef)) {
       return _instances.get(appRef);
     }

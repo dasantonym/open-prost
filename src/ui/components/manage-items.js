@@ -8,6 +8,7 @@ class ManageItems extends Vue {
     const defaultItem = {
       title: undefined,
       quantities: undefined,
+      quantity_prices: undefined,
       units: undefined,
       sizes: undefined,
       tags: undefined
@@ -57,19 +58,13 @@ class ManageItems extends Vue {
 
       addItem() {
         const _this = this,
-          sizes = [],
           item = Object.assign({}, this.itemToAdd);
 
-        item.quantities = item.quantities.split(',').sort();
-        item.units = item.units.split(',').sort();
-        item.tags = item.tags.split(',').sort();
-        item.sizes.split(',').map(size => {
-          const parsed = parseFloat(size);
-          if (typeof parsed === 'number') {
-            sizes.push(parsed);
-          }
-        });
-        item.sizes = sizes.length > 0 ? sizes.sort() : undefined;
+        item.quantities = item.quantities.split(',').map(quantity => quantity.trim());
+        item.quantity_prices = item.quantity_prices.split(',').map(price => parseFloat(price));
+        item.units = item.units.split(',').map(unit => unit.trim());
+        item.tags = item.tags.split(',').sort().map(tag => tag.trim());
+        item.sizes = item.sizes.split(',').map(price => parseFloat(price));
 
         _opts._appRef.service('items').create(item)
           .then(() => {

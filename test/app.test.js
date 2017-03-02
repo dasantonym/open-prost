@@ -2,7 +2,8 @@
 
 const assert = require('assert');
 const request = require('request');
-const app = require('../src/server/app');
+const app = require('../src/server/app').app;
+require('../src/server/app').initApp();
 
 describe('Feathers application tests', function() {
   before(function(done) {

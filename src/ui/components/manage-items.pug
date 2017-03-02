@@ -18,13 +18,15 @@ template#op-manage-items-tpl
                 el-input(placeholder="z.B. Chrombecher Pilzner, Arschtra Blaulicht, Specks Ultra...",
                   v-model="itemToAdd.title")
               el-form-item(label="Tags", prop="tags")
-                el-input(placeholder="z.B. Schnaps, Haushaltswaren...", v-model="itemToAdd.tags")
+                el-input(placeholder="z.B. Schnaps, Haushaltswaren, Gold...", v-model="itemToAdd.tags")
               el-form-item(required, label="Mengen", prop="quantities")
-                el-input(placeholder="z.B. Kisten, Flaschen...", v-model="itemToAdd.quantities")
+                el-input(placeholder="z.B. Kästen, Flaschen, Kartons...", v-model="itemToAdd.quantities")
+              el-form-item(required, label="Mengenpreise in Euro", prop="quantity_prices")
+                el-input(placeholder="z.B. 20.0, 0.75...", v-model="itemToAdd.quantity_prices")
               el-form-item(required, label="Größen", prop="sizes")
                 el-input(placeholder="z.B. 1, 0.3, 12...", v-model="itemToAdd.sizes")
               el-form-item(required, label="Einheiten", prop="units")
-                el-input(placeholder="z.B. Liter, Beutel, Rolle, Sack...", v-model="itemToAdd.units")
+                el-input(placeholder="z.B. Liter, Beutel, Rollen, Gigapökel...", v-model="itemToAdd.units")
               el-form-item.hide-label(label="Aktionen")
                 el-button(type="primary", @click="addItem") Speichern
     el-row(:gutter="20")
@@ -32,6 +34,7 @@ template#op-manage-items-tpl
         el-table(:data="itemData.items", stripe, :default-sort="{prop: 'title', order: 'ascending'}")
           el-table-column(prop="title", label="Titel", fixed, sortable, :width="titleWidth")
           el-table-column(prop="quantities", label="Mengen", :formatter="arrayToString")
+          el-table-column(prop="quantity_prices", label="Mengenpreise (€)", :formatter="arrayToString")
           el-table-column(prop="sizes", label="Größen", :formatter="arrayToString")
           el-table-column(prop="units", label="Einheiten", :formatter="arrayToString")
           el-table-column(prop="tags", label="Tags", :formatter="arrayToString",
