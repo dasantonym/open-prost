@@ -1,10 +1,10 @@
 template#op-configure-tpl
   el-form(ref="form", :model="configuration", label-position="top")
     el-row(:gutter="20", type="flex", justify="space-around")
-      el-col(:span="11")
+      el-col(:span="10")
         el-form-item(label="Lager", prop="storage_location")
           el-input(v-model="configuration.storage_location")
-      el-col(:span="11")
+      el-col(:span="10")
         el-form-item(label="Master URL", prop="master_url")
           el-input(v-model="configuration.title")
     el-row(type="flex", justify="space-around")

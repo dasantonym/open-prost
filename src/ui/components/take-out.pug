@@ -4,31 +4,34 @@ template#op-take-out-tpl
       el-col(:span="24")
         el-collapse(v-model="activeForm", accordion)
           el-collapse-item(title="Artikel entnehmen", name="additem")
-            el-form(:inline="true", ref="form", :model="takeOut", label-position="top")
-              el-form-item(label="Was", prop="title")
-                el-autocomplete(v-model="takeOut.title", :fetch-suggestions="queryItems", size="large",
-                  placeholder="z.B. Cola, Asbach...", @select="handleItemSelect")
-              el-form-item(label="Größe", prop="size", v-if="itemToAdd")
-                el-select(v-model="takeOut.size", size="large")
-                  el-option(v-for="size in itemToAdd.sizes", :v-key="size", :label="size", :value="size")
-              el-form-item(label="Einheit", prop="unit", v-if="itemToAdd")
-                el-select(v-model="takeOut.unit", size="large")
-                  el-option(v-for="unit in itemToAdd.units", :v-key="unit", :label="unit", :value="unit")
-              el-form-item(label="Packung", prop="quantity", v-if="itemToAdd")
-                el-select(v-model="takeOut.quantity", size="large")
-                  el-option(v-for="quantity in itemToAdd.quantities", :v-key="quantity", :label="quantity", :value="quantity")
-              el-form-item(label="Anzahl", prop="quantity_amount", v-if="itemToAdd")
-                el-input-number(v-model="takeOut.quantity_amount", size="large")
-              el-form-item.hide-label(label="Aktion", prop="quantity", v-if="itemToAdd")
-                el-button(@click="addTakeOut", type="primary", size="large") Hinzufügen
-            el-row(justify="center", type="flex", v-if="takeOut.title")
+            el-form.no-bottom-margin(:inline="true", ref="form", :model="takeOut", label-position="top")
+              el-row.no-bottom-margin(type="flex", justify="space-around")
+                el-form-item(label="Was nimmst du mit?", prop="title")
+                  el-autocomplete(v-model="takeOut.title", :fetch-suggestions="queryItems", size="large",
+                    placeholder="z.B. Cola, Asbach...", @select="handleItemSelect")
+                el-form-item(label="Größe", prop="size", v-if="itemToAdd")
+                  el-select(v-model="takeOut.size", size="large")
+                    el-option(v-for="size in itemToAdd.sizes", :v-key="size", :label="size", :value="size")
+                el-form-item(label="Einheit", prop="unit", v-if="itemToAdd")
+                  el-select(v-model="takeOut.unit", size="large")
+                    el-option(v-for="unit in itemToAdd.units", :v-key="unit", :label="unit", :value="unit")
+                el-form-item(label="Packung", prop="quantity", v-if="itemToAdd")
+                  el-select(v-model="takeOut.quantity", size="large")
+                    el-option(v-for="quantity in itemToAdd.quantities", :v-key="quantity", :label="quantity", :value="quantity")
+                el-form-item(label="Anzahl", prop="quantity_amount", v-if="itemToAdd")
+                  el-input-number(v-model="takeOut.quantity_amount", size="large")
+            el-row.no-bottom-margin(justify="center", type="flex", v-if="takeOut.title")
               h2
                 span(v-if="takeOut.quantity_amount") {{ takeOut.quantity_amount }} {{ takeOut.quantity }} {{ ' ' }}
                 span(v-if="takeOut.title") {{ takeOut.title }} {{ ' ' }}
                 span(v-if="takeOut.size") ({{ takeOut.size }} {{ takeOut.unit }}) {{ ' ' }}
                 span(v-if="takeOut.quantity_price") kosten {{ takeOut.quantity_price * takeOut.quantity_amount }}€
+            el-row(justify="center", type="flex", v-if="takeOut.title")
+              el-button(v-if="takeOut.quantity_amount", @click="addTakeOut", type="primary") Hinzufügen
     el-row(:gutter="10", v-if="takeOutList.length > 0", justify="center", type="flex")
-      el-button(size="large", @click="resetTakeOut") Reset
+      el-col(:span="4")
+        h2 Gesamt: {{ totalSum }}€
+      el-button(@click="resetTakeOut") Reset
       el-button(size="large", type="success", @click="submitTakeOut") Fertig
     el-row(:gutter="10", v-if="takeOutList.length > 0", type="flex")
       el-col(:span="24")

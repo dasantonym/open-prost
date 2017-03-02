@@ -130,6 +130,11 @@ class TakeOut extends Vue {
         } else {
           return window.innerHeight - 200;
         }
+      },
+      totalSum: function () {
+        return _opts.takeOutList.reduce((sum, takeOut) => {
+          return sum + takeOut.quantity_price * takeOut.quantity_amount;
+        }, 0.0);
       }
     };
 

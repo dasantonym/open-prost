@@ -6,7 +6,7 @@ class AppMain extends Vue {
 
     const _opts = {
       activeMenu: 'takeout',
-      activeTab: 'configure'
+      activeTab: 'manage-take-outs'
     };
 
     this.methods = {

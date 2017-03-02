@@ -13,7 +13,7 @@ import LoadItems from './load-items';
 
 import AppMain from './components/app-main';
 import TakeOut from './components/take-out';
-import TakeOutsList from './components/manage-take-outs';
+import ManageTakeOuts from './components/manage-take-outs';
 import Configure from './components/configure';
 import ManageItems from './components/manage-items';
 
@@ -28,7 +28,7 @@ Vue.use(ElementUI, {locale });
 
 Vue.component('op-app-main', new AppMain());
 Vue.component('op-take-out', new TakeOut(app));
-Vue.component('op-take-outs-list', new TakeOutsList(app));
+Vue.component('op-manage-take-outs', new ManageTakeOuts(app));
 Vue.component('op-configure', new Configure(app));
 Vue.component('op-manage-items', new ManageItems(app));
 
