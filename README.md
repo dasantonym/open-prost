@@ -12,6 +12,8 @@ The source code is written in ES6 JavaScript, using [Babel](https://babeljs.io) 
 
 To transpile the server code run `npm run babel`. To build the frontend execute `npm run build`. When releasing a version run `npm run release` (builds server, frontend, lints and runs tests).
 
+You can then build the [NW.js](https://nwjs.io/) app for OSX (or Win or Linux, just edit the task) by running ``npm run build-desktop``.
+
 ## Test
 
 Tests are incomplete (i know...) but you can run `npm test` to run whatever is there. Use `npm run jshint` to lint the code for errors.
