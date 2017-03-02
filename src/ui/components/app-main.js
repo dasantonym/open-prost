@@ -9,7 +9,6 @@ class AppMain extends Vue {
       activeTab: 'configure'
     };
 
-    this.template = '#op-app-main-tpl';
     this.methods = {
       handleTabs(/* tab, event */) {
         /* ignored */
@@ -18,9 +17,12 @@ class AppMain extends Vue {
         _opts.activeMenu = key;
       }
     };
+
     this.data = function () {
       return _opts;
     };
+
+    this.template = '#op-app-main-tpl';
   }
 }
 

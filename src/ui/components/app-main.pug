@@ -7,7 +7,12 @@ template#op-app-main-tpl
       op-take-out
     el-row(v-if="activeMenu === 'admin'")
       el-tabs(v-model="activeTab")
-        el-tab-pane(label="Einstellungen", name="configure")
-
+        el-tab-pane(label="Entnahmen", name="takeouts-list")
+          op-manage-take-outs
         el-tab-pane(label="Artikel", name="manage-items")
           op-manage-items
+        el-tab-pane(label="Locations", name="locations")
+        el-tab-pane(label="Veranstaltungen", name="events")
+        el-tab-pane(label="Leute", name="people")
+        el-tab-pane(label="Einstellungen", name="configure")
+          op-configure
