@@ -1,6 +1,8 @@
 'use strict';
 
 const app = require('./app').app;
+const Debug = require('debug');
+const debug = Debug('feathers');
 const configuration = require('feathers-configuration');
 
 /* global window:true */
@@ -16,7 +18,7 @@ if (typeof window !== 'undefined' && typeof window.require === 'function') {
     require('./app').initApp();
     let port = app.get('port');
     app.listen(port).on('listening', () =>
-      console.log(`Feathers application started on ${app.get('host')}:${port}`)
+      debug(`Feathers application started on ${app.get('host')}:${port}`)
     );
   }, 1000);
 } else {
@@ -24,6 +26,6 @@ if (typeof window !== 'undefined' && typeof window.require === 'function') {
   require('./app').initApp();
   let port = app.get('port');
   app.listen(port).on('listening', () =>
-    console.log(`Feathers application started on ${app.get('host')}:${port}`)
+    debug(`Feathers application started on ${app.get('host')}:${port}`)
   );
 }

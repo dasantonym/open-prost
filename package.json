@@ -3,7 +3,13 @@
   "description": "The future is liquid.",
   "version": "0.1.0",
   "homepage": "https://github.com/dasantonym/open-prost",
-  "keywords": ["liquid", "future", "awesome", "prostate", "artproject"],
+  "keywords": [
+    "liquid",
+    "future",
+    "awesome",
+    "prostate",
+    "artproject"
+  ],
   "license": "WTFPL",
   "repository": {
     "type": "git",

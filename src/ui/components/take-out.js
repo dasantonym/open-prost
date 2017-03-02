@@ -125,7 +125,7 @@ class TakeOut extends Vue {
 
     this.computed = {
       tableHeight: function () {
-        if (window.matchMedia && window.matchMedia("(-webkit-device-pixel-ratio: 2)").matches) {
+        if (window.matchMedia && window.matchMedia('(-webkit-device-pixel-ratio: 2)').matches) {
           return window.innerHeight - 400;
         } else {
           return window.innerHeight - 200;
