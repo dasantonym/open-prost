@@ -2,4 +2,4 @@ template#op-manage-take-outs-tpl
   el-row(:gutter="20")
     el-col(:span="24")
       el-table(:data="takeOuts", stripe, :default-sort="{prop: 'created', order: 'descending'}")
-        el-table-column(prop="created", label="Datum", fixed, sortable)
+        el-table-column(prop="created", label="Datum", sortable)

@@ -1,7 +1,7 @@
 template#op-manage-items-tpl
   #items
     el-dialog(:title="confirm.title", v-model="confirm.visible", size="tiny")
-      span Wirklich löschen?
+      span {{ confirm.body }}
       span(slot="footer", class="dialog-footer")
         el-button(@click="confirm.cancel") Abbrechen
         el-button(type="primary", @click="confirm.execute") Löschen
@@ -36,7 +36,7 @@ template#op-manage-items-tpl
                   el-form-item(required, label="Einheiten", prop="units")
                     el-input(placeholder="z.B. Liter, Beutel, Rollen, Gigapökel...", v-model="itemToAdd.units")
               el-row(:gutter="10", justify="space-around", type="flex")
-                el-button(type="primary", @click="addItem", size="large") Speichern
+                el-button(type="primary", @click="add", size="large") Speichern
     el-row(:gutter="20")
       el-col(:span="24")
         el-table(:data="itemData.items", stripe, :default-sort="{prop: 'title', order: 'ascending'}")
@@ -52,4 +52,4 @@ template#op-manage-items-tpl
           el-table-column(fixed="right", width="80")
             template(scope="scope")
               el-button-group
-                el-button(type="primary", icon="delete", size="mini", @click="removeItem(scope.row)")
+                el-button(type="primary", icon="delete", size="mini", @click="remove(scope.row)")

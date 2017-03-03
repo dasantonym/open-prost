@@ -47,6 +47,7 @@
     "webpack-dev": "cross-env NODE_ENV=dev webpack --progress --hide-modules",
     "webpack-watch": "cross-env NODE_ENV=dev webpack --watch --progress --hide-modules",
     "pug": "pug src/ui/index.pug --out build/desktop/ui/",
+    "pug-watch": "pug -w src/ui/index.pug --out build/desktop/ui/",
     "less": "lessc --clean-css='--s1 --advanced' ./src/ui/index.less ./build/desktop/ui/openprost-ui.css",
     "clean": "rm -rf ./build && rm -rf ./dist",
     "copy": "cp ./package.json build/desktop/ && cp -r ./build/server ./build/desktop/ && cp -r ./assets build/desktop/ && cp -r ./config ./build/desktop/",

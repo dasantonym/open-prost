@@ -36,13 +36,13 @@ template#op-take-out-tpl
     el-row(:gutter="10", v-if="takeOutList.length > 0", type="flex")
       el-col(:span="24")
         el-table(:data="takeOutList", stripe, :default-sort="{prop: 'title', order: 'ascending'}", :height="tableHeight")
-          el-table-column(label="So viel", sortable)
+          el-table-column(label="So viel")
             template(scope="scope")
               span {{ scope.row.quantity_amount }} {{ scope.row.quantity }}
-          el-table-column(label="Von dem hier", sortable)
+          el-table-column(label="Von dem hier")
             template(scope="scope")
               span {{ scope.row.title }} {{ scope.row.size }} {{ scope.row.unit }}
-          el-table-column(label="Kostet", sortable)
+          el-table-column(label="Kostet")
             template(scope="scope")
               span {{ scope.row.quantity_price * scope.row.quantity_amount }}€
           el-table-column(fixed="right", width="80")

@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import { Loading } from 'element-ui';
 
+import Confirm from '../util/confirm';
+
 class ManageItems extends Vue {
   constructor(appRef) {
     super();
@@ -17,20 +19,7 @@ class ManageItems extends Vue {
     const _opts = {
       _appRef: appRef,
       activeForm: undefined,
-      confirm: {
-        visible: false,
-        title: null,
-        fn: undefined,
-        execute: function () {
-          _opts.confirm.visible = false;
-          if (typeof _opts.confirm.fn === 'function') {
-            return _opts.confirm.fn();
-          }
-        },
-        cancel: function () {
-          _opts.confirm.visible = false;
-        }
-      },
+      confirm: Confirm,
       itemToAdd: Object.assign({}, defaultItem),
       itemData: {
         items: [],
@@ -56,7 +45,7 @@ class ManageItems extends Vue {
       //
       // Actions
 
-      addItem() {
+      add() {
         const _this = this,
           item = Object.assign({}, this.itemToAdd);
 
@@ -75,9 +64,10 @@ class ManageItems extends Vue {
           .then(_this.$message.success(`Artikel "${item.title}" hinzugefügt`))
           .catch(err => _this.handleError(err));
       },
-      removeItem(item) {
+      remove(item) {
         const _this = this;
         _opts.confirm.title = item.title;
+        _opts.confirm.body = 'Wirklich löschen?';
         _opts.confirm.fn = function () {
           return _opts._appRef.service('items').remove(item._id)
             .then(_this.itemsUpdated())
