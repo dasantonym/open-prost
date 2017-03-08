@@ -1,19 +1,19 @@
 'use strict';
-const takeouts = require('./takeout/index');
-const storage = require('./storage/index');
-const location = require('./location/index');
-const item = require('./item/index');
-const authentication = require('./authentication/index');
-const user = require('./user/index');
+const _takeouts = require('./takeout/index');
+const _storage = require('./storage/index');
+const _location = require('./location/index');
+const _item = require('./item/index');
+const _authentication = require('./authentication/index');
+const _user = require('./user/index');
 
 module.exports = function() {
   const app = this;
 
 
-  app.configure(authentication);
-  app.configure(user);
-  app.configure(item);
-  app.configure(location);
-  app.configure(storage);
-  app.configure(takeouts);
+  app.configure(_authentication);
+  app.configure(_user);
+  app.configure(_item);
+  app.configure(_location);
+  app.configure(_storage);
+  app.configure(_takeouts);
 };
