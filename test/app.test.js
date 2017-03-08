@@ -8,13 +8,15 @@ app.configure(configuration(require('path').join(__dirname, '..', '..')));
 require('../src/server/app').initApp();
 
 describe('Feathers application tests', function() {
+  const _this = this;
+
   before(function(done) {
-    this.server = app.listen(3030);
-    this.server.once('listening', () => done());
+    _this.server = app.listen(3030);
+    _this.server.once('listening', () => done());
   });
 
   after(function(done) {
-    this.server.close(done);
+    _this.server.close(done);
   });
 
   it('starts and shows the index page', function(done) {
