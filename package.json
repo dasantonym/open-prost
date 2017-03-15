@@ -96,7 +96,7 @@
     "nwjs-builder": "^1.14.0",
     "pug-cli": "^1.0.0-alpha6",
     "request": "^2.79.0",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.14.0",
     "webpack": "^2.2.1",
     "webpack-node-externals": "^1.5.4"
   },
