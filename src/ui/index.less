@@ -3,13 +3,24 @@
 body {
   font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
   font-size: 14px;
-  overflow:hidden;
+  // overflow:hidden;
   height:100%;
   width:100%;
 }
 
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+
+.clearfix:after {
+  clear: both
+}
+
 .el-row {
   margin-bottom: 20px;
+  padding: 16px;
   &:last-child {
     margin-bottom: 0;
   }
@@ -21,4 +32,8 @@ body {
 
 .hide-label label {
   visibility: hidden;
+}
+
+.cardheader {
+  line-height: 0.6em;
 }

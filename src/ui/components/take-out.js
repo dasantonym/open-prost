@@ -17,19 +17,28 @@ class TakeOut extends Vue {
     const _opts = {
       _appRef: appRef,
       activeForm: 'additem',
+      activeStep: 0,
       itemData: [],
+      personData: [],
+      locationData: [],
+      eventData: [],
       itemToAdd: undefined,
       takeOut: Object.assign({}, defaultTakeOut),
+      person: undefined,
+      event: undefined,
+      location: undefined,
       takeOutList: []
     };
 
-    const sortOnTitle = (a, b) => {
-      if (a.value > b.value) {
-        return 1;
-      } else if (a.value < b.value) {
-        return -1;
-      }
-      return 0;
+    const sortOn = (prop) => {
+      return (a, b) => {
+        if (a[prop] > b[prop]) {
+          return 1;
+        } else if (a[prop] < b[prop]) {
+          return -1;
+        }
+        return 0;
+      };
     };
 
     this.methods = {
@@ -53,7 +62,7 @@ class TakeOut extends Vue {
           _opts.takeOutList.push(_opts.takeOut);
         }
         _opts.takeOut = Object.assign({}, defaultTakeOut);
-        _opts.takeOutList = _opts.takeOutList.sort(sortOnTitle);
+        _opts.takeOutList = _opts.takeOutList.sort(sortOn('value'));
       },
       removeTakeOut(takeOut) {
         _opts.takeOutList.splice(_opts.takeOutList.indexOf(takeOut), 1);
@@ -67,6 +76,9 @@ class TakeOut extends Vue {
             _opts.takeOutList = [];
             Loading.service({fullscreen: true}).close();
             _this.$message.success('Entnahme hinzugefügt');
+            _opts.takeOut = Object.assign({}, defaultTakeOut);
+            _opts.takeOutList = [];
+            _opts.activeStep = 0;
           })
           .catch(err => {
             _this.$message.error(err.message);
@@ -76,6 +88,15 @@ class TakeOut extends Vue {
       resetTakeOut() {
         _opts.takeOutList = [];
       },
+      prevStep() {
+        _opts.activeStep -= 1;
+      },
+      nextStep() {
+        _opts.activeStep += 1;
+      },
+
+      // Items
+
       queryItems(query, cb) {
         if (!_opts.itemData || !Array.isArray(_opts.itemData.items)) {
           return cb([]);
@@ -88,7 +109,7 @@ class TakeOut extends Vue {
         _opts.itemData.items.map(item => {
           const entry = {value: item.title, data: item};
           if (showAll || (typeof item.title === 'string' && item.title.search(queryRegex) !== -1) ||
-            (Array.isArray(item.tags) && item.tags.join(' ').search(queryRegex) != -1)) {
+            (Array.isArray(item.tags) && item.tags.join(' ').search(queryRegex) !== -1)) {
 
             if (results.join(' ').search(queryRegex) === -1) {
               results.push(entry);
@@ -96,7 +117,7 @@ class TakeOut extends Vue {
           }
         });
 
-        cb(results.sort(sortOnTitle));
+        cb(results.sort(sortOn('value')));
       },
       handleItemSelect(item) {
         _opts.itemToAdd = item.data;
@@ -116,6 +137,87 @@ class TakeOut extends Vue {
         if (Array.isArray(_opts.itemToAdd.units)) {
           _opts.takeOut.unit = _opts.itemToAdd.units[0];
         }
+      },
+
+      // Persons
+
+      queryPersons(query, cb) {
+        if (!_opts.personData || !Array.isArray(_opts.personData.items)) {
+          return cb([]);
+        }
+
+        const results = [],
+          queryRegex = new RegExp(`${query}`, 'gi'),
+          showAll = typeof query !== 'string' || query.length === 0;
+
+        _opts.personData.items.map(item => {
+          const entry = {value: item.name, data: item};
+          if (showAll || (typeof item.name === 'string' && item.name.search(queryRegex) !== -1)) {
+
+            if (results.join(' ').search(queryRegex) === -1) {
+              results.push(entry);
+            }
+          }
+        });
+
+        cb(results.sort(sortOn('value')));
+      },
+      handlePersonSelect(item) {
+        // _opts.takeOut.person = item.data.name;
+      },
+
+      // Locations
+
+      queryLocations(query, cb) {
+        if (!_opts.locationData || !Array.isArray(_opts.locationData.items)) {
+          return cb([]);
+        }
+
+        const results = [],
+          queryRegex = new RegExp(`${query}`, 'gi'),
+          showAll = typeof query !== 'string' || query.length === 0;
+
+        _opts.locationData.items.map(item => {
+          const entry = {value: item.title, data: item};
+          if (showAll || (typeof item.title === 'string' && item.title.search(queryRegex) !== -1)) {
+
+            if (results.join(' ').search(queryRegex) === -1) {
+              results.push(entry);
+            }
+          }
+        });
+
+        cb(results.sort(sortOn('value')));
+      },
+      handleLocationSelect(item) {
+        // _opts.takeOut.location = item.data;
+      },
+
+      // Events
+
+      queryEvents(query, cb) {
+        if (!_opts.eventData || !Array.isArray(_opts.eventData.items)) {
+          return cb([]);
+        }
+
+        const results = [],
+          queryRegex = new RegExp(`${query}`, 'gi'),
+          showAll = typeof query !== 'string' || query.length === 0;
+
+        _opts.eventData.items.map(item => {
+          const entry = {value: item.title, data: item};
+          if (showAll || (typeof item.title === 'string' && item.title.search(queryRegex) !== -1)) {
+
+            if (results.join(' ').search(queryRegex) === -1) {
+              results.push(entry);
+            }
+          }
+        });
+
+        cb(results.sort(sortOn('value')));
+      },
+      handleEventSelect(item) {
+        //_opts.takeOut.event = item.data.title;
       }
     };
 
@@ -143,7 +245,12 @@ class TakeOut extends Vue {
     this.mounted = function () {
       _opts._appRef.get('loadItems').loadItems()
         .then(data => _opts.itemData = data);
-
+      _opts._appRef.get('loadEvents').loadEvents()
+        .then(data => _opts.eventData = data);
+      _opts._appRef.get('loadLocations').loadLocations()
+        .then(data => _opts.locationData = data);
+      _opts._appRef.get('loadPersons').loadPersons()
+        .then(data => _opts.personData = data);
     };
   }
 }

@@ -1,9 +1,35 @@
 template#op-take-out-tpl
   #take-out
     el-row(:gutter="20")
-      el-col(:span="24")
-        el-collapse(v-model="activeForm", accordion)
-          el-collapse-item(title="Artikel entnehmen", name="additem")
+      el-col(:span="3")
+        el-steps(:space="80", :active="activeStep", direction="vertical", finish-status="success")
+          el-step(title="Wer?")
+          el-step(title="Wo?")
+          el-step(title="Was?")
+      el-col(:span="21")
+        el-card
+          .clearfix(slot="header")
+            div(style="float: right;")
+              el-button(v-if="activeStep > 0", @click="prevStep", type="default") Zurück
+              el-button(v-if="activeStep === 2", @click="submitTakeOut", type="success") Fertig
+              el-button(v-if="activeStep < 2", @click="nextStep", type="primary") Weiter
+            h3.cardheader Artikel entnehmen
+          div(v-if="activeStep === 0")
+            el-form.no-bottom-margin(:inline="true", ref="form", :model="takeOut", label-position="top")
+              el-row.no-bottom-margin(type="flex", justify="space-around")
+                el-form-item(label="Wie ist Dein Name?", prop="person")
+                  el-autocomplete(v-model="person", :fetch-suggestions="queryPersons",
+                    size="large", @select="handlePersonSelect")
+          div(v-if="activeStep === 1")
+            el-form.no-bottom-margin(:inline="true", ref="form", :model="takeOut", label-position="top")
+              el-row.no-bottom-margin(type="flex", justify="space-around")
+                el-form-item(label="Welche Location?", prop="location")
+                  el-autocomplete(v-model="location", :fetch-suggestions="queryLocations",
+                    size="large", @select="handleLocationSelect")
+                el-form-item(label="Welche Veranstaltung?", prop="event")
+                  el-autocomplete(v-model="event", :fetch-suggestions="queryEvents",
+                    size="large", @select="handleEventSelect")
+          div(v-if="activeStep === 2")
             el-form.no-bottom-margin(:inline="true", ref="form", :model="takeOut", label-position="top")
               el-row.no-bottom-margin(type="flex", justify="space-around")
                 el-form-item(label="Was nimmst du mit?", prop="title")
@@ -20,19 +46,17 @@ template#op-take-out-tpl
                     el-option(v-for="quantity in itemToAdd.quantities", :v-key="quantity", :label="quantity", :value="quantity")
                 el-form-item(label="Anzahl", prop="quantity_amount", v-if="itemToAdd")
                   el-input-number(v-model="takeOut.quantity_amount", size="large")
-            el-row.no-bottom-margin(justify="center", type="flex", v-if="takeOut.title")
-              h2
-                span(v-if="takeOut.quantity_amount") {{ takeOut.quantity_amount }} {{ takeOut.quantity }} {{ ' ' }}
-                span(v-if="takeOut.title") {{ takeOut.title }} {{ ' ' }}
-                span(v-if="takeOut.size") ({{ takeOut.size }} {{ takeOut.unit }}) {{ ' ' }}
-                span(v-if="takeOut.quantity_price") kosten {{ takeOut.quantity_price * takeOut.quantity_amount }}€
-            el-row(justify="center", type="flex", v-if="takeOut.title")
-              el-button(v-if="takeOut.quantity_amount", @click="addTakeOut", type="primary") Hinzufügen
+              el-row.no-bottom-margin(justify="center", type="flex", v-if="takeOut.title")
+                h2
+                  span(v-if="takeOut.quantity_amount") {{ takeOut.quantity_amount }} {{ takeOut.quantity }} {{ ' ' }}
+                  span(v-if="takeOut.title") {{ takeOut.title }} {{ ' ' }}
+                  span(v-if="takeOut.size") ({{ takeOut.size }} {{ takeOut.unit }}) {{ ' ' }}
+                  span(v-if="takeOut.quantity_price") kosten {{ takeOut.quantity_price * takeOut.quantity_amount }}€
+              el-row(justify="center", type="flex", v-if="takeOut.title")
+                el-button(v-if="takeOut.quantity_amount", @click="addTakeOut", type="primary") Hinzufügen
     el-row(:gutter="10", v-if="takeOutList.length > 0", justify="center", type="flex")
       el-col(:span="4")
         h2 Gesamt: {{ totalSum }}€
-      el-button(@click="resetTakeOut") Reset
-      el-button(size="large", type="success", @click="submitTakeOut") Fertig
     el-row(:gutter="10", v-if="takeOutList.length > 0", type="flex")
       el-col(:span="24")
         el-table(:data="takeOutList", stripe, :default-sort="{prop: 'title', order: 'ascending'}", :height="tableHeight")
