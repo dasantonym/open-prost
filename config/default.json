@@ -1,8 +1,8 @@
 {
   "host": "localhost",
   "port": 3030,
-  "nedb": "../data/",
-  "public": "../build/desktop/ui/",
+  "nedb": "data",
+  "public": "build/desktop",
   "auth": {
     "token": {
       "secret": "wZ05KoH56w6SJKVrpHdUrCJQXD5d7EeSf2HuInjoiwEvvkqY684Btzj7TbQGua9uGogamFVXwjxJPsy+2xv5Hw=="
