@@ -61,7 +61,7 @@ class LoadItems extends Vue {
         return _this;
       })
       .catch(err => {
-        _this.$message.error(err.message);
+        _this.$message.error(`Error loading items: ${err.message}`);
         _loader.close();
 
         return _this;

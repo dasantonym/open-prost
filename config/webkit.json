@@ -1,7 +1,7 @@
 {
   "host": "127.0.0.1",
   "port": 3030,
-  "public": "../ui/",
+  "public": "build/desktop",
   "auth": {
     "token": {
       "secret": "wZ05KoH56w6SJKVrpHdUrCJQXD5d7EeSf2HuInjoiwEvvkqY684Btzj7TbQGua9uGogamFVXwjxJPsy+2xv5Hw=="
