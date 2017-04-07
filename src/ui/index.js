@@ -10,6 +10,9 @@ import rest from 'feathers-rest/client';
 import superagent from 'superagent';
 
 import LoadItems from './util/load-items';
+import LoadEvents from './util/load-events';
+import LoadLocations from './util/load-locations';
+import LoadPersons from './util/load-persons';
 
 import AppMain from './components/app-main';
 import TakeOut from './components/take-out';
@@ -25,6 +28,15 @@ const app = feathers()
 const loadItems = new LoadItems(app);
 app.set('loadItems', loadItems);
 
+const loadEvents = new LoadEvents(app);
+app.set('loadEvents', loadEvents);
+
+const loadLocations = new LoadLocations(app);
+app.set('loadLocations', loadLocations);
+
+const loadPersons = new LoadPersons(app);
+app.set('loadPersons', loadPersons);
+
 const defaultLocation = {
   title: undefined
 };
@@ -34,9 +46,12 @@ Vue.use(ElementUI, {locale });
 Vue.component('op-app-main', new AppMain());
 Vue.component('op-take-out', new TakeOut(app));
 Vue.component('op-manage-take-outs', new ManageTakeOuts(app));
-Vue.component('op-configure', new Configure(app));
 Vue.component('op-manage-items', new ManageItems(app));
 Vue.component('op-manage-locations', new ManageCommonResource(app, defaultLocation, 'locations'));
+
+if (typeof window.require === 'function') {
+  Vue.component('op-configure', new Configure(app));
+}
 
 window.eventBus = new Vue();
 
