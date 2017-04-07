@@ -4,7 +4,7 @@ const path = require('path'),
 module.exports = {
   entry: './src/ui/index.js',
   output: {
-    path: path.resolve(__dirname, './build/desktop/ui'),
+    path: path.resolve(__dirname, './build/desktop/'),
     publicPath: './',
     filename: 'openprost-ui.js'
   },
