@@ -23,7 +23,7 @@
   "engines": {
     "node": ">= 4.5"
   },
-  "main": "ui/index.html",
+  "main": "index-nw.html",
   "node-main": "server/index.js",
   "js-flags": "--harmony",
   "window": {
@@ -39,16 +39,17 @@
   "scripts": {
     "start": "node build/server/",
     "release": "npm run clean && npm run babel && npm run build && npm run test && npm run build-desktop",
-    "build": "npm run webpack && npm run pug && npm run less",
+    "build": "npm run babel-nw && npm run webpack && npm run pug && npm run less",
     "test": "npm run jshint && npm run mocha",
     "jshint": "jshint src/. test/. --config",
     "babel": "babel src/server/ --out-dir build/server/",
+    "babel-nw": "babel src/ui/ --out-dir build/desktop/",
     "webpack": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "webpack-dev": "cross-env NODE_ENV=dev webpack --progress --hide-modules",
     "webpack-watch": "cross-env NODE_ENV=dev webpack --watch --progress --hide-modules",
-    "pug": "pug src/ui/index.pug --out build/desktop/ui/",
-    "pug-watch": "pug -w src/ui/index.pug --out build/desktop/ui/",
-    "less": "lessc --clean-css='--s1 --advanced' ./src/ui/index.less ./build/desktop/ui/openprost-ui.css",
+    "pug": "pug src/ui/*.pug --out build/desktop/",
+    "pug-watch": "pug -w src/ui/index.pug --out build/desktop/",
+    "less": "lessc --clean-css='--s1 --advanced' ./src/ui/index.less ./build/desktop/openprost-ui.css",
     "clean": "rm -rf ./build && rm -rf ./dist",
     "copy": "cp ./package.json build/desktop/ && cp -r ./build/server ./build/desktop/ && cp -r ./assets build/desktop/ && cp -r ./config ./build/desktop/",
     "debug-desktop": "npm run copy && cross-env NODE_ENV=dev nwb nwbuild -v 0.20.1-sdk -r -- --remote-debugging-port=9222 ./build/desktop/",
@@ -89,6 +90,7 @@
     "cross-env": "^3.2.3",
     "css-loader": "^0.26.1",
     "file-loader": "^0.10.0",
+    "istanbul": "^1.0.0-alpha",
     "jshint": "^2.9.4",
     "less": "^2.7.2",
     "less-plugin-clean-css": "^1.5.1",
