@@ -47,7 +47,7 @@ class Configure extends Vue {
 
     this.template = '#op-configure-tpl';
 
-    this.load();
+    this.methods.load();
   }
 }
 

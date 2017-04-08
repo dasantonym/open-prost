@@ -12,7 +12,7 @@ if (typeof window !== 'undefined' && typeof window.require === 'function') {
     /* global window:false */
     /* jshint node:true */
     process.env.NODE_ENV = 'webkit';
-    app.configure(configuration(require('path').join(__dirname, '..')));
+    app.configure(configuration());
     app.set('nedb', require('path').join(gui.App.dataPath, 'nedb'));
     /* jshint node:false */
     require('./app').initApp();
@@ -22,7 +22,7 @@ if (typeof window !== 'undefined' && typeof window.require === 'function') {
     );
   }, 1000);
 } else {
-  app.configure(configuration(require('path').join(__dirname, '..', '..')));
+  app.configure(configuration());
   require('./app').initApp();
   let port = app.get('port');
   app.listen(port).on('listening', () =>
