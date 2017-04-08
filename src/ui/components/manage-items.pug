@@ -1,6 +1,6 @@
 template#op-manage-items-tpl
   #items
-    el-dialog(:title="confirm.title", v-model="confirm.visible", size="tiny")
+    el-dialog(:title="confirm.title", v-model="confirm.visible", size="tiny", :modal-append-to-body="false")
       span {{ confirm.body }}
       span(slot="footer", class="dialog-footer")
         el-button(@click="confirm.cancel") Abbrechen

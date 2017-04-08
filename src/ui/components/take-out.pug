@@ -15,13 +15,13 @@ template#op-take-out-tpl
               el-button(v-if="activeStep < 2", @click="nextStep", type="primary") Weiter
             h3.cardheader Artikel entnehmen / Gesamtwert: {{ totalSum }}€
           div(v-if="activeStep === 0")
-            el-form.no-bottom-margin(:inline="true", ref="form", :model="takeOut", label-position="top")
+            el-form.no-bottom-margin(:inline="true", ref="form", label-position="top")
               el-row.no-bottom-margin(type="flex", justify="space-around")
                 el-form-item(label="Wie ist Dein Name?", prop="person")
                   el-autocomplete(v-model="person", :fetch-suggestions="queryPersons",
                     size="large", @select="handlePersonSelect")
           div(v-if="activeStep === 1")
-            el-form.no-bottom-margin(:inline="true", ref="form", :model="takeOut", label-position="top")
+            el-form.no-bottom-margin(:inline="true", ref="form", label-position="top")
               el-row.no-bottom-margin(type="flex", justify="space-around")
                 el-form-item(label="Welche Location?", prop="location")
                   el-autocomplete(v-model="location", :fetch-suggestions="queryLocations",

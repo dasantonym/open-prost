@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { Loading } from 'element-ui';
+import Promise from 'bluebird';
 
 import Helpers from '../util/helpers';
 
@@ -16,6 +17,12 @@ class TakeOut extends Vue {
       unit: undefined
     };
 
+    const defaultTakeOutMeta = {
+      person: undefined,
+      location: undefined,
+      event: undefined
+    };
+
     const _opts = {
       _appRef: appRef,
       activeForm: 'additem',
@@ -26,10 +33,23 @@ class TakeOut extends Vue {
       eventData: [],
       itemToAdd: undefined,
       takeOut: Object.assign({}, defaultTakeOut),
+      takeOutMeta: Object.assign({}, defaultTakeOutMeta),
       person: undefined,
       event: undefined,
       location: undefined,
       takeOutList: []
+    };
+
+    const loadData = (force) => {
+      return Promise.map([
+        { res: 'loadItems', val: 'itemData' },
+        { res: 'loadEvents', val: 'eventData' },
+        { res: 'loadLocations', val: 'locationData' },
+        { res: 'loadPersons', val: 'personData' }
+      ], obj => {
+        return _opts._appRef.get(obj.res).load(force)
+          .then(data => _opts[obj.val] = data);
+      });
     };
 
     this.methods = {
@@ -59,21 +79,80 @@ class TakeOut extends Vue {
         _opts.takeOutList.splice(_opts.takeOutList.indexOf(takeOut), 1);
       },
       submitTakeOut() {
-        const _this = this;
-        Loading.service({fullscreen: true});
-        _opts._appRef.service('takeouts')
-          .create({ user: 'anonymous', created: new Date(), list: _opts.takeOutList })
+        const _this = this,
+          _loader = Loading.service({fullscreen: true});
+
+        const assignOrCreate = (source, target, resource, createObj, errorMsg) => {
+          if (target.title === createObj.title && target.name === createObj.name) {
+            return Promise.resolve();
+          }
+          if (typeof source !== 'string') {
+            throw new Error(errorMsg);
+          }
+          return _opts._appRef.service(resource).create(createObj)
+            .then((data) => {
+              target = data;
+            });
+        };
+
+        Promise.resolve()
           .then(() => {
-            _opts.takeOutList = [];
-            Loading.service({fullscreen: true}).close();
-            _this.$message.success('Entnahme hinzugefügt');
-            _opts.takeOut = Object.assign({}, defaultTakeOut);
-            _opts.takeOutList = [];
-            _opts.activeStep = 0;
+            return assignOrCreate(
+              _opts.person,
+              _opts.takeOutMeta.person,
+              'persons',
+              { name: _opts.person },
+              'Du musst Deinen Namen eintragen.'
+            );
+          })
+          .then(() => {
+            return assignOrCreate(
+              _opts.location,
+              _opts.takeOutMeta.location,
+              'locations',
+              { title: _opts.location },
+              'Du musst eine Location eintragen.'
+            );
+          })
+          .then(() => {
+            return assignOrCreate(
+              _opts.event,
+              _opts.takeOutMeta.event,
+              'events',
+              { title: _opts.event },
+              'Du musst ein Event eintragen.'
+            );
+          })
+          .then(() => {
+            return loadData(true);
+          })
+          .then(() => {
+            _opts.takeOutMeta.sum = _this.totalSum;
+            return _opts._appRef.service('takeouts')
+              .create({
+                user: 'anonymous',
+                created: new Date(),
+                list: _opts.takeOutList,
+                meta: _opts.takeOutMeta
+              })
+              .then(() => {
+                _opts.takeOutList = [];
+                _opts.takeOut = Object.assign({}, defaultTakeOut);
+                _opts.takeOutMeta = Object.assign({}, defaultTakeOutMeta);
+                _opts.takeOutList = [];
+                _opts.activeStep = 0;
+
+                _opts.person = undefined;
+                _opts.location = undefined;
+                _opts.event = undefined;
+
+                _loader.close();
+                _this.$message.success('Entnahme hinzugefügt');
+              });
           })
           .catch(err => {
             _this.$message.error(err.message);
-            Loading.service({fullscreen: true}).close();
+            _loader.close();
           });
       },
       resetTakeOut() {
@@ -119,7 +198,7 @@ class TakeOut extends Vue {
         cb(results.sort(Helpers.sortOn('value')));
       },
       handlePersonSelect(item) {
-        // _opts.takeOut.person = item.data.name;
+        _opts.takeOutMeta.person = item.data;
       },
 
       // Locations
@@ -129,7 +208,7 @@ class TakeOut extends Vue {
         cb(results.sort(Helpers.sortOn('value')));
       },
       handleLocationSelect(item) {
-        // _opts.takeOut.location = item.data;
+        _opts.takeOutMeta.location = item.data;
       },
 
       // Events
@@ -139,7 +218,7 @@ class TakeOut extends Vue {
         cb(results.sort(Helpers.sortOn('value')));
       },
       handleEventSelect(item) {
-        //_opts.takeOut.event = item.data.title;
+        _opts.takeOutMeta.event = item.data;
       }
     };
 
@@ -165,14 +244,7 @@ class TakeOut extends Vue {
     this.template = '#op-take-out-tpl';
 
     this.mounted = function () {
-      _opts._appRef.get('loadItems').loadItems()
-        .then(data => _opts.itemData = data);
-      _opts._appRef.get('loadEvents').loadEvents()
-        .then(data => _opts.eventData = data);
-      _opts._appRef.get('loadLocations').loadLocations()
-        .then(data => _opts.locationData = data);
-      _opts._appRef.get('loadPersons').loadPersons()
-        .then(data => _opts.personData = data);
+      return loadData(true);
     };
   }
 }

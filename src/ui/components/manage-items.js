@@ -33,7 +33,7 @@ class ManageItems extends Vue {
       // Handlers
 
       itemsUpdated() {
-        _opts._appRef.get('loadItems').loadItems(true)
+        _opts._appRef.get('loadItems').load(true)
           .then(data => _opts.itemData = data);
       },
       handleError(err) {
@@ -108,7 +108,7 @@ class ManageItems extends Vue {
     this.template = '#op-manage-items-tpl';
 
     this.mounted = function () {
-      _opts._appRef.get('loadItems').loadItems()
+      _opts._appRef.get('loadItems').load()
         .then(data => _opts.itemData = data);
     };
   }

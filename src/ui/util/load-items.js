@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import {Loading} from 'element-ui';
 
 const _instances = new WeakMap();
 
@@ -22,13 +21,12 @@ class LoadItems extends Vue {
     _instances.set(appRef, this);
   }
 
-  loadItems(forceUpdate) {
+  load(forceUpdate) {
     if (!forceUpdate && this.items.length > 0) {
       return Promise.resolve(this);
     }
 
-    const _this = this,
-      _loader = Loading.service({ fullscreen: true });
+    const _this = this;
 
     return this._appRef.service('items').find({ paginate: false })
       .then(res => {
@@ -56,13 +54,10 @@ class LoadItems extends Vue {
         _this.units = reduceValues(res.data, 'units');
         _this.items = res.data;
 
-        _loader.close();
-
         return _this;
       })
       .catch(err => {
         _this.$message.error(`Error loading items: ${err.message}`);
-        _loader.close();
 
         return _this;
       });

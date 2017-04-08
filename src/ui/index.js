@@ -37,9 +37,15 @@ app.set('loadLocations', loadLocations);
 const loadPersons = new LoadPersons(app);
 app.set('loadPersons', loadPersons);
 
-const defaultLocation = {
-  title: undefined
-};
+const defaultPerson = {
+    name: undefined
+  },
+  defaultLocation = {
+    title: undefined
+  },
+  defaultEvent = {
+    title: undefined
+  };
 
 Vue.use(ElementUI, {locale });
 
@@ -47,7 +53,9 @@ Vue.component('op-app-main', new AppMain());
 Vue.component('op-take-out', new TakeOut(app));
 Vue.component('op-manage-take-outs', new ManageTakeOuts(app));
 Vue.component('op-manage-items', new ManageItems(app));
+Vue.component('op-manage-persons', new ManageCommonResource(app, defaultPerson, 'persons'));
 Vue.component('op-manage-locations', new ManageCommonResource(app, defaultLocation, 'locations'));
+Vue.component('op-manage-events', new ManageCommonResource(app, defaultEvent, 'events'));
 
 if (typeof window.require === 'function') {
   Vue.component('op-configure', new Configure(app));

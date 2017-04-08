@@ -25,7 +25,7 @@ class ManageCommonResource extends Vue {
             _this.dataToAdd = Object.assign({}, defaultObject);
             _loader.close();
             _this.update();
-            _this.$message.success(`"${res.title}" hinzugefügt`);
+            _this.$message.success(`"${res.title || res.name}" hinzugefügt`);
           })
           .catch(err => {
             _loader.close();
@@ -48,13 +48,19 @@ class ManageCommonResource extends Vue {
       },
       remove(item) {
         const _this = this;
-        _opts.confirm.title = item.title;
+        _opts.confirm.title = item.title || item.name;
         _opts.confirm.body = 'Wirklich löschen?';
         _opts.confirm.fn = function () {
+          const _loader = Loading.service({fullscreen: true});
           return _opts._appRef.service(resource)
             .remove(item._id)
-            .then(_this.update())
-            .catch(err => _this.handleError(err));
+            .then(() => {
+              _this.update();
+            })
+            .catch(err => {
+              _loader.close();
+              _this.$message.error(err.message);
+            });
         };
         _opts.confirm.visible = true;
       },

@@ -1,5 +1,5 @@
-template#op-manage-locations-tpl
-  #manage-locations
+template#op-manage-persons-tpl
+  #manage-persons
     el-dialog(:title="confirm.title", v-model="confirm.visible", size="tiny", :modal-append-to-body="false")
       span {{ confirm.body }}
       span(slot="footer", class="dialog-footer")
@@ -8,19 +8,19 @@ template#op-manage-locations-tpl
     el-row(:gutter="20")
       el-col(:span="24")
         el-collapse(v-model="activeForm", accordion)
-          el-collapse-item(title="Location anlegen", name="create")
+          el-collapse-item(title="Person anlegen", name="create")
             el-form(ref="form", :model="dataToAdd", label-position="top")
               el-row(:gutter="10", justify="start", type="flex")
                 el-col(:span="24")
-                  el-form-item(required, label="Titel", prop="title")
-                    el-input(placeholder="z.B. Jupibar, Petersdom, PK14...",
-                      v-model="dataToAdd.title")
+                  el-form-item(required, label="Name", prop="name")
+                    el-input(placeholder="z.B. Anna, Arthur...",
+                      v-model="dataToAdd.name")
               el-row(:gutter="10", justify="space-around", type="flex")
                 el-button(type="primary", @click="add", size="large") Speichern
     el-row(:gutter="20")
       el-col(:span="24")
-        el-table(:data="data", stripe, :default-sort="{prop: 'title', order: 'ascending'}")
-          el-table-column(prop="title", label="Titel", sortable)
+        el-table(:data="data", stripe, :default-sort="{prop: 'name', order: 'ascending'}")
+          el-table-column(prop="name", label="Name", sortable)
           el-table-column(fixed="right", width="80")
             template(scope="scope")
               el-button-group
