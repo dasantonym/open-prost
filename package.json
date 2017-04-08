@@ -52,8 +52,8 @@
     "less": "lessc --clean-css='--s1 --advanced' ./src/ui/index.less ./build/desktop/openprost-ui.css",
     "clean": "rm -rf ./build && rm -rf ./dist",
     "copy": "cp ./package.json build/desktop/ && cp -r ./build/server ./build/desktop/ && cp -r ./assets build/desktop/ && cp -r ./config ./build/desktop/",
-    "debug-desktop": "npm run copy && cross-env NODE_ENV=dev nwb nwbuild -v 0.20.1-sdk -r -- --remote-debugging-port=9222 ./build/desktop/",
-    "build-desktop": "npm run copy && cross-env NODE_ENV=production nwb nwbuild --win-ico assets/openprost.ico --mac-icns assets/openprost.icns -o ./dist --side-by-side -p osx64 -v 0.20.1 ./build/desktop/",
+    "debug-desktop": "npm run copy && cross-env NODE_ENV=dev nwb nwbuild -v 0.21.5-sdk -r -- --remote-debugging-port=9222 ./build/desktop/",
+    "build-desktop": "npm run copy && cross-env NODE_ENV=production nwb nwbuild --win-ico assets/openprost.ico --mac-icns assets/openprost.icns -o ./dist --side-by-side -p osx64 -v 0.21.5 ./build/desktop/",
     "mocha": "mocha test/ --recursive --timeout 4000"
   },
   "dependencies": {
