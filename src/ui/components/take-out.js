@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import { Loading } from 'element-ui';
 
+import Helpers from '../util/helpers';
+
 class TakeOut extends Vue {
   constructor(appRef) {
     super();
@@ -30,17 +32,6 @@ class TakeOut extends Vue {
       takeOutList: []
     };
 
-    const sortOn = (prop) => {
-      return (a, b) => {
-        if (a[prop] > b[prop]) {
-          return 1;
-        } else if (a[prop] < b[prop]) {
-          return -1;
-        }
-        return 0;
-      };
-    };
-
     this.methods = {
       addTakeOut() {
         if (!_opts.takeOut) {
@@ -62,7 +53,7 @@ class TakeOut extends Vue {
           _opts.takeOutList.push(_opts.takeOut);
         }
         _opts.takeOut = Object.assign({}, defaultTakeOut);
-        _opts.takeOutList = _opts.takeOutList.sort(sortOn('value'));
+        _opts.takeOutList = _opts.takeOutList.sort(Helpers.sortOn('value'));
       },
       removeTakeOut(takeOut) {
         _opts.takeOutList.splice(_opts.takeOutList.indexOf(takeOut), 1);
@@ -98,26 +89,8 @@ class TakeOut extends Vue {
       // Items
 
       queryItems(query, cb) {
-        if (!_opts.itemData || !Array.isArray(_opts.itemData.items)) {
-          return cb([]);
-        }
-
-        const results = [],
-          queryRegex = new RegExp(`${query}`, 'gi'),
-          showAll = typeof query !== 'string' || query.length === 0;
-
-        _opts.itemData.items.map(item => {
-          const entry = {value: item.title, data: item};
-          if (showAll || (typeof item.title === 'string' && item.title.search(queryRegex) !== -1) ||
-            (Array.isArray(item.tags) && item.tags.join(' ').search(queryRegex) !== -1)) {
-
-            if (results.join(' ').search(queryRegex) === -1) {
-              results.push(entry);
-            }
-          }
-        });
-
-        cb(results.sort(sortOn('value')));
+        const results = Helpers.queryData(_opts.itemData.items, query, ['title', 'tags']);
+        cb(results.sort(Helpers.sortOn('value')));
       },
       handleItemSelect(item) {
         _opts.itemToAdd = item.data;
@@ -142,25 +115,8 @@ class TakeOut extends Vue {
       // Persons
 
       queryPersons(query, cb) {
-        if (!_opts.personData || !Array.isArray(_opts.personData.items)) {
-          return cb([]);
-        }
-
-        const results = [],
-          queryRegex = new RegExp(`${query}`, 'gi'),
-          showAll = typeof query !== 'string' || query.length === 0;
-
-        _opts.personData.items.map(item => {
-          const entry = {value: item.name, data: item};
-          if (showAll || (typeof item.name === 'string' && item.name.search(queryRegex) !== -1)) {
-
-            if (results.join(' ').search(queryRegex) === -1) {
-              results.push(entry);
-            }
-          }
-        });
-
-        cb(results.sort(sortOn('value')));
+        const results = Helpers.queryData(_opts.personData.items, query, ['name'], 'name');
+        cb(results.sort(Helpers.sortOn('value')));
       },
       handlePersonSelect(item) {
         // _opts.takeOut.person = item.data.name;
@@ -169,25 +125,8 @@ class TakeOut extends Vue {
       // Locations
 
       queryLocations(query, cb) {
-        if (!_opts.locationData || !Array.isArray(_opts.locationData.items)) {
-          return cb([]);
-        }
-
-        const results = [],
-          queryRegex = new RegExp(`${query}`, 'gi'),
-          showAll = typeof query !== 'string' || query.length === 0;
-
-        _opts.locationData.items.map(item => {
-          const entry = {value: item.title, data: item};
-          if (showAll || (typeof item.title === 'string' && item.title.search(queryRegex) !== -1)) {
-
-            if (results.join(' ').search(queryRegex) === -1) {
-              results.push(entry);
-            }
-          }
-        });
-
-        cb(results.sort(sortOn('value')));
+        const results = Helpers.queryData(_opts.locationData.items, query);
+        cb(results.sort(Helpers.sortOn('value')));
       },
       handleLocationSelect(item) {
         // _opts.takeOut.location = item.data;
@@ -196,25 +135,8 @@ class TakeOut extends Vue {
       // Events
 
       queryEvents(query, cb) {
-        if (!_opts.eventData || !Array.isArray(_opts.eventData.items)) {
-          return cb([]);
-        }
-
-        const results = [],
-          queryRegex = new RegExp(`${query}`, 'gi'),
-          showAll = typeof query !== 'string' || query.length === 0;
-
-        _opts.eventData.items.map(item => {
-          const entry = {value: item.title, data: item};
-          if (showAll || (typeof item.title === 'string' && item.title.search(queryRegex) !== -1)) {
-
-            if (results.join(' ').search(queryRegex) === -1) {
-              results.push(entry);
-            }
-          }
-        });
-
-        cb(results.sort(sortOn('value')));
+        const results = Helpers.queryData(_opts.eventData.items, query);
+        cb(results.sort(Helpers.sortOn('value')));
       },
       handleEventSelect(item) {
         //_opts.takeOut.event = item.data.title;
