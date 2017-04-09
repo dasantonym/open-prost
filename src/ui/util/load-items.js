@@ -52,6 +52,7 @@ class LoadItems extends Vue {
           });
         _this.quantities = reduceValues(res.data, 'quantities');
         _this.units = reduceValues(res.data, 'units');
+        _this.sizes = reduceValues(res.data, 'sizes');
         _this.items = res.data;
 
         return _this;

@@ -4,7 +4,7 @@ template#op-take-out-tpl
       el-col(:span="3")
         el-steps(:space="80", :active="activeStep", direction="vertical", finish-status="success")
           el-step(title="Wer?")
-          el-step(title="Wo?")
+          el-step(title="Wofür?")
           el-step(title="Was?")
       el-col(:span="21")
         el-card
@@ -14,21 +14,26 @@ template#op-take-out-tpl
               el-button(v-if="activeStep === 2", @click="submitTakeOut", type="success") Fertig
               el-button(v-if="activeStep < 2", @click="nextStep", type="primary") Weiter
             h3.cardheader Artikel entnehmen / Gesamtwert: {{ totalSum }}€
+            p(v-if="person && location && takeOutMeta.date && event")
+              span Am {{ formattedDate }} von {{ person }} für {{ location }} / {{ event }}
           div(v-if="activeStep === 0")
             el-form.no-bottom-margin(:inline="true", ref="form", label-position="top")
               el-row.no-bottom-margin(type="flex", justify="space-around")
                 el-form-item(label="Wie ist Dein Name?", prop="person")
                   el-autocomplete(v-model="person", :fetch-suggestions="queryPersons",
                     size="large", @select="handlePersonSelect")
+                el-form-item(label="Welche Fläche?", prop="location")
+                  el-autocomplete(v-model="location", :fetch-suggestions="queryLocations",
+                    size="large", @select="handleLocationSelect")
           div(v-if="activeStep === 1")
             el-form.no-bottom-margin(:inline="true", ref="form", label-position="top")
               el-row.no-bottom-margin(type="flex", justify="space-around")
-                el-form-item(label="Welche Location?", prop="location")
-                  el-autocomplete(v-model="location", :fetch-suggestions="queryLocations",
-                    size="large", @select="handleLocationSelect")
                 el-form-item(label="Welche Veranstaltung?", prop="event")
                   el-autocomplete(v-model="event", :fetch-suggestions="queryEvents",
                     size="large", @select="handleEventSelect")
+                el-form-item(label="Welches Datum?", prop="takeOutMeta.date")
+                  el-date-picker(v-model="takeOutMeta.date", type="date", placeholder="Datum wählen",
+                    :picker-options="pickerOptions", format="dd. MM. yyyy")
           div(v-if="activeStep === 2")
             el-form.no-bottom-margin(:inline="true", ref="form", :model="takeOut", label-position="top")
               el-row.no-bottom-margin(type="flex", justify="space-around")
@@ -36,25 +41,26 @@ template#op-take-out-tpl
                   el-autocomplete(v-model="takeOut.title", :fetch-suggestions="queryItems", size="large",
                     placeholder="z.B. Cola, Asbach...", @select="handleItemSelect")
                 el-form-item(label="Größe", prop="size", v-if="takeOut.title")
-                  el-select(v-model="takeOut.size", size="large")
-                    el-option(v-for="size in itemToAdd.sizes", :v-key="size", :label="size", :value="size")
-                el-form-item(label="Einheit", prop="unit", v-if="takeOut.title")
-                  el-select(v-model="takeOut.unit", size="large")
-                    el-option(v-for="unit in itemToAdd.units", :v-key="unit", :label="unit", :value="unit")
-              el-row.no-bottom-margin(type="flex", justify="space-around")
+                  el-select(v-model="takeOut.mergedSize", size="large")
+                    el-option(v-for="mergedSize in itemMergedSizes", :v-key="mergedSize", :label="mergedSize", :value="mergedSize")
                 el-form-item(label="Anzahl", prop="quantity_amount", v-if="takeOut.title")
                   el-input-number(v-model="takeOut.quantity_amount", size="large")
                 el-form-item(label="Packung", prop="quantity", v-if="takeOut.title")
                   el-select(v-model="takeOut.quantity", size="large")
                     el-option(v-for="quantity in itemToAdd.quantities", :v-key="quantity", :label="quantity", :value="quantity")
-                el-form-item.hide-label(label="---", prop="quantity", v-if="takeOut.title")
-                  el-button(v-if="takeOut.quantity_amount", @click="addTakeOut", type="primary") Hinzufügen
-              el-row.no-bottom-margin(justify="center", type="flex", v-if="takeOut.title")
-                h2.cardheader
-                  span(v-if="takeOut.quantity_amount") {{ takeOut.quantity_amount }} {{ takeOut.quantity }} {{ ' ' }}
-                  span(v-if="takeOut.title") {{ takeOut.title }} {{ ' ' }}
-                  span(v-if="takeOut.size") ({{ takeOut.size }} {{ takeOut.unit }}) {{ ' ' }}
-                  span(v-if="takeOut.quantity_price") kosten {{ takeOut.quantity_price * takeOut.quantity_amount }}€
+              el-row.no-bottom-margin(v-if="takeOut.title")
+                el-col(:span="12")
+                  el-form-item.hide-label(label="---")
+                    el-alert(title="", type="info", show-icon, :closable="false")
+                      slot
+                        h3.cardheader
+                          span(v-if="takeOut.quantity_amount") {{ takeOut.quantity_amount }} {{ takeOut.quantity }} {{ ' ' }}
+                          span(v-if="takeOut.title") {{ takeOut.title }} {{ ' ' }}
+                          span(v-if="takeOut.size") ({{ takeOut.size }} {{ takeOut.unit }}) {{ ' ' }}
+                          span(v-if="takeOut.quantity_price") kosten {{ takeOut.quantity_price * takeOut.quantity_amount }}€
+                el-col(:span="12")
+                  el-form-item.hide-label(style="float: right;", label="---", prop="quantity")
+                    el-button(v-if="takeOut.quantity_amount", @click="addTakeOut", type="primary", size="large") Hinzufügen
     el-row(:gutter="10", v-if="takeOutList.length > 0", type="flex")
       el-col(:span="24")
         el-table(:data="takeOutList", stripe, :default-sort="{prop: 'title', order: 'ascending'}", :height="tableHeight")

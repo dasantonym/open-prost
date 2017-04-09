@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Loading } from 'element-ui';
 import Promise from 'bluebird';
+import moment from 'moment';
 
 import Helpers from '../util/helpers';
 
@@ -14,14 +15,33 @@ class TakeOut extends Vue {
       quantity: undefined,
       quantity_price: undefined,
       size: undefined,
-      unit: undefined
+      unit: undefined,
+      mergedSize: undefined
     };
 
     const defaultTakeOutMeta = {
       person: undefined,
       location: undefined,
-      event: undefined
+      event: undefined,
+      date: new Date()
     };
+
+    const datePickerOpts = { shortcuts: [
+      {
+        text: 'Heute',
+        onClick(picker) {
+          picker.$emit('pick', new Date());
+        }
+      },
+      {
+        text: 'Gestern',
+        onClick(picker) {
+          const date = new Date();
+          date.setTime(date.getTime() - 3600 * 1000 * 24);
+          picker.$emit('pick', date);
+        }
+      }
+    ]};
 
     const _opts = {
       _appRef: appRef,
@@ -31,25 +51,38 @@ class TakeOut extends Vue {
       personData: [],
       locationData: [],
       eventData: [],
+      itemMergedSizes: [],
       itemToAdd: undefined,
       takeOut: Object.assign({}, defaultTakeOut),
       takeOutMeta: Object.assign({}, defaultTakeOutMeta),
       person: undefined,
       event: undefined,
       location: undefined,
-      takeOutList: []
+      takeOutList: [],
+      pickerOptions: datePickerOpts
     };
 
     const loadData = (force) => {
       return Promise.map([
-        { res: 'loadItems', val: 'itemData' },
-        { res: 'loadEvents', val: 'eventData' },
-        { res: 'loadLocations', val: 'locationData' },
-        { res: 'loadPersons', val: 'personData' }
-      ], obj => {
-        return _opts._appRef.get(obj.res).load(force)
-          .then(data => _opts[obj.val] = data);
-      });
+          { res: 'loadItems', val: 'itemData' },
+          { res: 'loadEvents', val: 'eventData' },
+          { res: 'loadLocations', val: 'locationData' },
+          { res: 'loadPersons', val: 'personData' }
+        ], obj => {
+          return _opts._appRef.get(obj.res).load(force)
+            .then(data => _opts[obj.val] = data);
+        })
+        .then(() => {
+          _opts.itemMergedSizes = [];
+          if (_opts.itemData && Array.isArray(_opts.itemData.sizes) && Array.isArray(_opts.itemData.units)) {
+            _opts.itemData.sizes.forEach(size => {
+              _opts.itemData.units.forEach(unit => {
+                const mergedTitle = `${size} ${unit}`;
+                _opts.itemMergedSizes.push(mergedTitle);
+              });
+            });
+          }
+        });
     };
 
     this.methods = {
@@ -58,11 +91,17 @@ class TakeOut extends Vue {
           return;
         }
 
+        const splitSize = _opts.takeOut.mergedSize.split(' ');
         let exists = false;
+
+        _opts.takeOut.size = parseFloat(splitSize.shift());
+        _opts.takeOut.unit = splitSize.join(' ');
+
         _opts.takeOutList.map(takeOut => {
-          if (!exists && takeOut.title === _opts.takeOut.title &&
-            takeOut.size === _opts.takeOut.size &&
-            takeOut.unit === _opts.takeOut.unit &&
+          if (!exists &&
+            takeOut.title === _opts.takeOut.title &&
+            takeOut.size === _opts.takeOut.size  &&
+            takeOut.unit === _opts.takeOut.unit  &&
             takeOut.quantity === _opts.takeOut.quantity) {
 
             takeOut.quantity_amount += _opts.takeOut.quantity_amount;
@@ -183,12 +222,17 @@ class TakeOut extends Vue {
         if (Array.isArray(_opts.itemToAdd.quantity_prices)) {
           _opts.takeOut.quantity_price = _opts.itemToAdd.quantity_prices[0];
         }
+        if (Array.isArray(_opts.itemMergedSizes)) {
+          _opts.takeOut.mergedSize = _opts.itemMergedSizes[0];
+        }
+        /*
         if (Array.isArray(_opts.itemToAdd.sizes)) {
           _opts.takeOut.size = _opts.itemToAdd.sizes[0];
         }
         if (Array.isArray(_opts.itemToAdd.units)) {
           _opts.takeOut.unit = _opts.itemToAdd.units[0];
         }
+        */
       },
 
       // Persons
@@ -229,15 +273,18 @@ class TakeOut extends Vue {
     this.computed = {
       tableHeight: function () {
         if (window.matchMedia && window.matchMedia('(-webkit-device-pixel-ratio: 2)').matches) {
-          return window.innerHeight - 400;
+          return window.innerHeight - 800;
         } else {
-          return window.innerHeight - 200;
+          return window.innerHeight - 400;
         }
       },
       totalSum: function () {
         return _opts.takeOutList.reduce((sum, takeOut) => {
           return sum + takeOut.quantity_price * takeOut.quantity_amount;
         }, 0.0);
+      },
+      formattedDate: function () {
+        return moment(_opts.takeOutMeta.date).format('DD. MM. YYYY');
       }
     };
 
