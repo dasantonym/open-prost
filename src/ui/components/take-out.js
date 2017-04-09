@@ -170,6 +170,7 @@ class TakeOut extends Vue {
               throw new Error('Es sind keine Artikel ausgewählt');
             }
             _opts.takeOutMeta.sum = _this.totalSum;
+            _opts.takeOutMeta.created = Date.now();
             return _opts._appRef.service('takeouts')
               .create({
                 user: 'anonymous',
