@@ -62,6 +62,18 @@ class TakeOut extends Vue {
       pickerOptions: datePickerOpts
     };
 
+    const mergeSizes = () => {
+      _opts.itemMergedSizes = [];
+      if (_opts.itemToAdd && Array.isArray(_opts.itemToAdd.sizes) && Array.isArray(_opts.itemToAdd.units)) {
+        _opts.itemToAdd.sizes.forEach(size => {
+          _opts.itemToAdd.units.forEach(unit => {
+            const mergedTitle = `${size} ${unit}`;
+            _opts.itemMergedSizes.push(mergedTitle);
+          });
+        });
+      }
+    };
+
     const loadData = (force) => {
       return Promise.map([
           { res: 'loadItems', val: 'itemData' },
@@ -71,17 +83,6 @@ class TakeOut extends Vue {
         ], obj => {
           return _opts._appRef.get(obj.res).load(force)
             .then(data => _opts[obj.val] = data);
-        })
-        .then(() => {
-          _opts.itemMergedSizes = [];
-          if (_opts.itemData && Array.isArray(_opts.itemData.sizes) && Array.isArray(_opts.itemData.units)) {
-            _opts.itemData.sizes.forEach(size => {
-              _opts.itemData.units.forEach(unit => {
-                const mergedTitle = `${size} ${unit}`;
-                _opts.itemMergedSizes.push(mergedTitle);
-              });
-            });
-          }
         });
     };
 
@@ -122,7 +123,7 @@ class TakeOut extends Vue {
           _loader = Loading.service({fullscreen: true});
 
         const assignOrCreate = (source, target, resource, createObj, errorMsg) => {
-          if (target.title === createObj.title && target.name === createObj.name) {
+          if (typeof target !== 'undefined' && target.title === createObj.title && target.name === createObj.name) {
             return Promise.resolve();
           }
           if (typeof source !== 'string') {
@@ -226,17 +227,12 @@ class TakeOut extends Vue {
         if (Array.isArray(_opts.itemToAdd.quantity_prices)) {
           _opts.takeOut.quantity_price = _opts.itemToAdd.quantity_prices[0];
         }
+        mergeSizes();
+        _opts.takeOut.size = undefined;
+        _opts.takeOut.unit = undefined;
         if (Array.isArray(_opts.itemMergedSizes)) {
           _opts.takeOut.mergedSize = _opts.itemMergedSizes[0];
         }
-        /*
-        if (Array.isArray(_opts.itemToAdd.sizes)) {
-          _opts.takeOut.size = _opts.itemToAdd.sizes[0];
-        }
-        if (Array.isArray(_opts.itemToAdd.units)) {
-          _opts.takeOut.unit = _opts.itemToAdd.units[0];
-        }
-        */
       },
 
       // Persons

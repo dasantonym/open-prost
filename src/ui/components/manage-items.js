@@ -34,7 +34,9 @@ class ManageItems extends Vue {
 
       itemsUpdated() {
         _opts._appRef.get('loadItems').load(true)
-          .then(data => _opts.itemData = data);
+          .then(data => {
+            _opts.itemData = data;
+          });
       },
       handleError(err) {
         this.$message.error(err.message);
