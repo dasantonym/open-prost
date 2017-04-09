@@ -75,7 +75,10 @@
     "nedb": "^1.8.0",
     "passport": "^0.3.2",
     "serve-favicon": "^2.4.0",
+    "slugify": "^1.1.0",
     "superagent": "^3.4.4",
+    "uuid": "^3.0.1",
+    "uuid5": "^1.0.2",
     "vue": "^2.2.0",
     "winston": "^2.3.1"
   },

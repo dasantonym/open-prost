@@ -21,15 +21,9 @@ module.exports = function () {
     }
   };
 
-  // Initialize our service with any options it requires
   app.use('/takeouts', service(options));
 
-  // Get our initialize service to that we can bind hooks
   const takeOutService = app.service('/takeouts');
-
-  // Set up our before hooks
   takeOutService.before(hooks.before);
-
-  // Set up our after hooks
   takeOutService.after(hooks.after);
 };
