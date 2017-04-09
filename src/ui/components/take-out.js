@@ -166,6 +166,9 @@ class TakeOut extends Vue {
             return loadData(true);
           })
           .then(() => {
+            if (_opts.takeOutList.length === 0) {
+              throw new Error('Es sind keine Artikel ausgewählt');
+            }
             _opts.takeOutMeta.sum = _this.totalSum;
             return _opts._appRef.service('takeouts')
               .create({
