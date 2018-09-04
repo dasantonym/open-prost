@@ -7,6 +7,7 @@
 </template>
 
 <script>
+  import getToken from '../lib/get-token'
   export default {
     data () {
       return {
@@ -14,9 +15,16 @@
       }
     },
     methods: {
-      submit () {
-        console.debug(this.password)
-        this.$router.push({ name: 'items.list' })
+      async submit () {
+        this.$q.loading.show()
+        const token = await getToken(this.password)
+        this.$q.loading.hide()
+        if (!this.$store.state.settings.access_token && token !== this.$store.state.settings.access_token) {
+          this.$router.push({ name: 'items.list' })
+        }
+        else {
+          this.$q.notify('No')
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 <template lang="pug">
   .q-ma-lg
-    q-table.full-width(:loading="loading", :title="resource", :data="items", :filter="filter", :columns="tableColumns", row-key="uuid")
+    q-table.full-width(v-if="items", :loading="loading", :title="resource", :data="items", :filter="filter", :columns="tableColumns", row-key="uuid")
       template(slot="top-left", slot-scope="props")
         slot(name="buttons-left")
           h3.caption.q-ma-md {{ capitalize(resource) }}
@@ -23,7 +23,7 @@
     data () {
       return {
         filter: undefined,
-        items: [],
+        items: undefined,
         loading: false
       }
     },

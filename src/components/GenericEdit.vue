@@ -21,7 +21,7 @@
       }
     },
     async mounted () {
-      if (this.$route.params.uuid) this.item = await this.$store.dispatch('items/get', this.$route.params.uuid)
+      if (this.$route.params.uuid) this.item = await this.$store.dispatch(`${this.resource}/get`, this.$route.params.uuid)
     },
     computed: {
       title () {
@@ -30,6 +30,7 @@
     },
     methods: {
       async submit () {
+        this.$q.loading.show()
         try {
           if (this.item.uuid) await this.$store.dispatch(`${this.resource}/update`, [{uuid: this.item.uuid}, this.item])
           else await this.$store.dispatch(`${this.resource}/insert`, this.item)
@@ -39,6 +40,7 @@
         catch (err) {
           this.$q.notify(err.message)
         }
+        this.$q.loading.hide()
       }
     }
   }
